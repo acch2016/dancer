@@ -27,23 +27,23 @@ r= Routine({
 
 			while({byte = p.read; byte !=9  }, { str  = str ++byte.asAscii; });
             ~fsr = str.asInteger;
-            ("fsr:"+ ~fsr).post;
+			// ("fsr:"+ ~fsr).post;
 
             while({byte = p.read; byte !=9  }, { str1 = str1++byte.asAscii; });
             ~a1 = str1.asFloat;
-            ("x:"+ ~a1.asStringPrec(5)).post;
+			// ("x:"+ ~a1.asStringPrec(5)).post;
 
             while({byte = p.read; byte !=9  }, { str2 = str2++byte.asAscii; });
             ~a2 = str2.asFloat;
-            ("  y:"+ ~a2.asStringPrec(5)).post;
+			// ("  y:"+ ~a2.asStringPrec(5)).post;
 
             while({byte = p.read; byte !=9  }, { str3 = str3++byte.asAscii; });
             ~a3 = str3.asFloat;
-            ("  z:"+ ~a3.asStringPrec(5)).post;
+			// ("  z:"+ ~a3.asStringPrec(5)).post;
 
 			while({byte = p.read; byte !=13 }, { str4 = str4++byte.asAscii; });
             ~m00s = str4.asInteger;
-            ("  m00s:"+ ~m00s).postln;
+			// ("  m00s:"+ ~m00s).postln;
 
         });
     }.loop;
@@ -56,27 +56,31 @@ r= Routine({
 r.stop;
 p.close;
 s.makeWindow
+s.meter
 // PRENDER EL SERVIDOR
 s.boot
 (
-SynthDef(\saw, {
-    arg cutoff = 1000;
+SynthDef(\saw, {| cutoff = 1000, vol=0.2 |
+	// arg cutoff = 1000;
     var sig;
     sig = Saw.ar([50,51]);
-    sig = RLPF.ar(sig,cutoff.lag(0.02).postln, 0.25, 0.2);
+	sig = RLPF.ar(sig, cutoff.lag(0.02), 0.25, vol.lag(0.02));
     Out.ar(0, sig);
 }).add
 )
 
-/*~synth = Synth(\saw, [\cutoff, 200]);
+~synth = Synth(\saw, [\cutoff, 200, \vol, 0.4]);
 ~synth.set(\cutoff, 4000);
-~synth.free*/
+~synth.set(\vol, 0.1);
+~synth.free
 
-~synth = Synth(\saw, [\cutoff, ~a1.linexp(-1, 1.2, 80, 4000)]);
+~synth = Synth(\saw, [\cutoff, ~a1.linexp(-1, 1.2, 80, 4000),
+	                  \vol, ~m00s.linexp(1, 1023, 0.01, 0.4)]);
 (
 ~control = Routine({
     {
         ~synth.set(\cutoff, ~a1.linexp(-1, 1.2, 80, 4000));
+		~synth.set(\vol, ~m00s.linexp(1, 1023, 0.01, 0.4));
         0.01.wait;
     }.loop;
 }).play;
