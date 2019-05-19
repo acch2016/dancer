@@ -44,11 +44,11 @@ Array.fill(1, {StaticText(~c[1], 190@40)});
 ~c[1].children[2].string_("FSR");
 ~c[1].children[2].align_(\center);
 
-
+Array.fill(1, {ScopeView(     ~c[2], 100@100)});
 Array.fill(2, {Knob(          ~c[2], 40@40)});
 Array.fill(1, {StaticText(    ~c[2], 190@40)});
-~c[2].children[2].string_("M00S");
-~c[2].children[2].align_(\center);
+~c[2].children[3].string_("M00S");
+~c[2].children[3].align_(\center);
 
 Array.fill(1, {StaticText(   ~c[3], 20@160)});
 Array.fill(1, {FreqScopeView(~c[3], 160@160)});
@@ -102,7 +102,7 @@ r= Routine({
 			{~c[0].children[2].value = ~a2.linlin(-1, 1, 0, 1); }.defer;
 			{~c[0].children[3].value = ~a3.linlin(-1, 1, 0, 1); }.defer;
 
-			{~c[1].children[0].value = ~fsr.linexp(1, 1023, 0.0001, 1); }.defer;
+			{~c[1].children[0].value = ~fsr.linexp(1, 1000, 0.0001, 1); /*~fsr.postln*/}.defer;
 
         });
     }.loop;
