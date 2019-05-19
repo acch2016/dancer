@@ -102,7 +102,7 @@ r= Routine({
 			{~c[0].children[2].value = ~a2.linlin(-1, 1, 0, 1); }.defer;
 			{~c[0].children[3].value = ~a3.linlin(-1, 1, 0, 1); }.defer;
 
-			// {~c[1].children[0].value = ~fsr.linexp(1, 1023, 0, 1); }.defer;
+			{~c[1].children[0].value = ~fsr.linexp(1, 1023, 0.0001, 1); }.defer;
 
         });
     }.loop;
